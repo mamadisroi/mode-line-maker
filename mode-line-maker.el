@@ -3,7 +3,7 @@
 ;; Copyright (C) 2025 Nicolas Rougier
 
 ;; Maintainer: Nicolas P. Rougier <Nicolas.Rougier@inria.fr>
-;; URL: https://github.com/rougier/nano-modeline
+;; URL: https://github.com/rougier/mode-line-maker
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "29.1"))
 ;; Keywords: convenience, mode-line, header-line
@@ -26,14 +26,14 @@
 ;;; Commentary:
 ;;
 ;; mode-line-maker is a package to ease the creation of mode-line,
-;; header-line or tab-line. It allows to define the precise alignment
+;; header-line or tab-line.  It allows to define the precise alignment
 ;; of the mode-line (on left and right sides) and splits the mode-line
 ;; into left and right parts, with automatic truncation (when there is
 ;; too much information to display).
 ;;
 ;; These features come with a price in rendering speed because
-;; everything is computed dynamically. From early benchmarks, you can
-;; expect a significant slowdown (between x2 and x3). Things can get
+;; everything is computed dynamically.  From early benchmarks, you can
+;; expect a significant slowdown (between x2 and x3).  Things can get
 ;; worse if you use pixel-wise alignment because of the
 ;; string-pixel-width call.
 ;;
@@ -63,11 +63,12 @@
   "Face for mode-line padding.")
 
 (defcustom mode-line-maker-alignment '(window . window)
-  "Left and right alignment of the mode-line. Depending on the position of
-the fringe (outside or inside margins), the semantic of the alignment
-changes (see below).
+  "Left and right alignment of the mode-line.
 
-fringes-outside-margins t
+Depending on the position of the fringe (outside or inside margins), the
+semantic of the alignment changes (see below).
+
+'fringes-outside-margins' t
    ┌───┬────────┬───────────────────────────────────────┬────────┬───┬───┐
    │                         'window alignment                           │
    └───┴────────┴───────────────────────────────────────┴────────┴───┴───┘
@@ -89,7 +90,7 @@ fringes-outside-margins t
    Left fringe                                            Right fringe │
                                                                 Scroll bar
 
-fringes-outside-margins nil
+'fringes-outside-margins' nil
    ┌───┬────────┬───────────────────────────────────────┬────────┬───┬───┐
    │                         'window alignment                           │
    └───┴────────┴───────────────────────────────────────┴────────┴───┴───┘
@@ -109,8 +110,7 @@ fringes-outside-margins nil
    └───┼────┴─┼─┴───────────────────────────────────────┴─┼─┴────┼───┴─┼─┘
        │ Left fringe                                Right fringe │     │
     Left margin                                           Right margin │
-                                                               Scroll bar
-"
+                                                               Scroll bar."
   :type '(cons (choice :tag "Left"
                        (const window)
                        (const margin)
@@ -123,17 +123,17 @@ fringes-outside-margins nil
                        (const text))))
 
 (defcustom mode-line-maker-truncation-rule 'left
-  "When the concatenation of the left and right parts does not fit the
-mode-line, they needs to be truncated. Depending on the truncation rule,
- left part, right part or both can be truncated. Right part is truncated
- on the left and left part is truncated on the right."
+  "This variable defines the truncation rules to be applied.
+When the concatenation of the left and right parts does not fit the
+mode-line, they needs to be truncated.  Depending on the truncation
+rule, left part, right part or both can be truncated.  Right part is
+truncated on the left and left part is truncated on the right."
   :type  '(choice (const left)
                   (const right)
                   (const both)))
 
 (defun mode-line-maker--truncate-string (string size &optional ellipsis direction)
-  "Truncate a STRING to SIZE characters, appending or prepending an ELLISPIS
-depending on the DIRECTION ('left or 'right)."
+  "This function truncate a STRING to SIZE characters, appending or prepending an ELLIPSIS depending on the DIRECTION ('left or 'right)."
 
   (let* ((ellipsis (or ellipsis (truncate-string-ellipsis)))
          (direction (or direction 'right)))
@@ -160,10 +160,12 @@ depending on the DIRECTION ('left or 'right)."
           (t string))))
   
 (defun mode-line-maker--align-to (direction what &optional char-size pixel-size)
-  "This methods return a display space specification to align some text on
-the DIRECTION ('left or 'right) of WHAT ('window, 'margin, 'fringe or
-'text) with an additional (optional) CHAR-SIZE and PIXEL-SIZE.
- PIXEL-SIZE alignment is taken into account only for graphics display."
+  "This methods return a display space specification to align.
+
+Some text on the
+DIRECTION ('left or 'right) of WHAT ('window, 'margin, 'fringe or 'text)
+with an additional (optional) CHAR-SIZE and PIXEL-SIZE.  PIXEL-SIZE
+alignment is taken into account only for graphics display."
 
   (let* ((char-size (or char-size 0))
          (pixel-size (if (display-graphic-p)
@@ -188,29 +190,31 @@ the DIRECTION ('left or 'right) of WHAT ('window, 'margin, 'fringe or
                                                          ,char-size)))))
           ((eq 'right direction)
            (cond ((eq what 'window) `(space :align-to (+ scroll-bar
-                                                  (1.0 . scroll-bar)
-                                                  (,pixel-size)
-                                                  ,char-size)))
-          ((eq what 'fringe) `(space :align-to (+ right-fringe
-                                                  (1.0 . right-fringe)
-                                                  (,pixel-size)
-                                                  ,char-size)))
-          ((eq what 'margin) `(space :align-to (+ right-margin
-                                                  (1.0 . right-margin)
-                                                  (,pixel-size)
-                                                  ,char-size)))
-          (t                 `(space :align-to (+ right
-                                                  (,pixel-size)
-                                                  ,char-size))))))))
+                                                         (1.0 . scroll-bar)
+                                                         (,pixel-size)
+                                                         ,char-size)))
+                 ((eq what 'fringe) `(space :align-to (+ right-fringe
+                                                         (1.0 . right-fringe)
+                                                         (,pixel-size)
+                                                         ,char-size)))
+                 ((eq what 'margin) `(space :align-to (+ right-margin
+                                                         (1.0 . right-margin)
+                                                         (,pixel-size)
+                                                         ,char-size)))
+                 (t                 `(space :align-to (+ right
+                                                         (,pixel-size)
+                                                         ,char-size))))))))
   
 (defun mode-line-maker--padding-to (&optional left right face)
-  "This function returns the left and right padding to precisely align the
-mode-line (or header-line) to window, margin, fringe or text extents,
-depending on LEFT and RIGHT. LEFT and RIGHT can be constant ('window,
-'fringe, 'margin or 'text) or a cons specifying (what . (char-size
-. pixel-size)). It returns two strings that must be respectively
-prepended and appended to the mode-line (or header-line). An optional
-FACE can be given to be used for the prefix and the suffix."
+  "Return the left and right padding for alignment.
+
+It allow to precisely align the mode-line (or header-line) to window,
+margin, fringe or text extents, depending on LEFT and RIGHT.  LEFT and
+RIGHT can be constant ('window, 'fringe, 'margin or 'text) or a cons
+specifying (what . (char-size . pixel-size)).  It returns two strings
+that must be respectively prepended and appended to the mode-line (or
+header-line).  An optional FACE can be given to be used for the prefix
+and the suffix."
 
   (let* ((left (or left (car mode-line-maker-alignment)))
          (left (if (not (consp left))
@@ -242,9 +246,12 @@ FACE can be given to be used for the prefix and the suffix."
                   'face face)))))
 
 (defun mode-line-maker--make (left &optional right alignment pixelwise)
-  "This function builds a mode-line with LEFT on the left and RIGHT on
-the right. It takes care of truncating the left part, the right part
-or both depending on the 'mode-line-maker-truncation-rule"
+  "Builds a mode-line with LEFT on the left and RIGHT on the right.
+
+It takes care of truncating the left part, the right part or both
+depending on the 'mode-line-maker-truncation-rule'.  ALIGNMENT can be
+specified to replace the default 'mode-line-maker-alignment'.  PIXELWISE
+specified whether pixel perfect alignment shoudl be computed (slower)."
 
   (let* ((right (format-mode-line right))
          (right-width (string-width right))
@@ -369,9 +376,12 @@ or both depending on the 'mode-line-maker-truncation-rule"
 
 
 (defun mode-line-maker (left &optional right alignment pixelwise)
-  "Build a mode-line using LEFT and RIGHT parts with an optional ALIGNMENT
-and PIXELWISE precision. LEFT and RIGHT are list of any valid mode-line
-constructs without."
+  "Return a mode-line made of LEFT and RIGHT parts.
+
+LEFT and RIGHT parts must be list of mode-line constructs.  The
+optional ALIGNMENT can be specified to replace the default
+'mode-line-maker-alignment'.  PIXELWISE specified whether pixel
+perfect alignment shoudl be computed (slower)."
   
   `(:eval (mode-line-maker--make ',left ',right ',alignment ,pixelwise)))
 
