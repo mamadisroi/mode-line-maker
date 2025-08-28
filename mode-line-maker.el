@@ -133,7 +133,10 @@ truncated on the left and left part is truncated on the right."
                   (const both)))
 
 (defun mode-line-maker--truncate-string (string size &optional ellipsis direction)
-  "This function truncate a STRING to SIZE characters, appending or prepending an ELLIPSIS depending on the DIRECTION ('left or 'right)."
+  "This function truncate a STRING to SIZE characters.
+
+The resulting string may be appended or prepended an ELLIPSIS depending
+on the DIRECTION ('left or 'right)."
 
   (let* ((ellipsis (or ellipsis (truncate-string-ellipsis)))
          (direction (or direction 'right)))
@@ -162,10 +165,10 @@ truncated on the left and left part is truncated on the right."
 (defun mode-line-maker--align-to (direction what &optional char-size pixel-size)
   "This methods return a display space specification to align.
 
-Some text on the
-DIRECTION ('left or 'right) of WHAT ('window, 'margin, 'fringe or 'text)
-with an additional (optional) CHAR-SIZE and PIXEL-SIZE.  PIXEL-SIZE
-alignment is taken into account only for graphics display."
+Some text on the DIRECTION ('left or 'right) of WHAT ('window, 'margin,
+'fringe or 'text) with an additional (optional) CHAR-SIZE and
+PIXEL-SIZE.  PIXEL-SIZE alignment is taken into account only for
+graphics display."
 
   (let* ((char-size (or char-size 0))
          (pixel-size (if (display-graphic-p)
