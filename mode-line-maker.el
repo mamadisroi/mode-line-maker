@@ -135,7 +135,7 @@ truncated on the left and left part is truncated on the right."
 (defun mode-line-maker--truncate-string (string size &optional ellipsis direction)
   "This function truncate a STRING to SIZE characters.
 
-The resulting string may be appended or prepended an ELLIPSIS depending
+The resulting string may be appended or prepended with an ELLIPSIS depending
 on the DIRECTION ('left or 'right)."
 
   (let* ((ellipsis (or ellipsis (truncate-string-ellipsis)))
@@ -163,12 +163,12 @@ on the DIRECTION ('left or 'right)."
           (t string))))
   
 (defun mode-line-maker--align-to (direction what &optional char-size pixel-size)
-  "This methods return a display space specification to align.
+  "This methods return a display space specification to align text.
 
-Some text on the DIRECTION ('left or 'right) of WHAT ('window, 'margin,
-'fringe or 'text) with an additional (optional) CHAR-SIZE and
-PIXEL-SIZE.  PIXEL-SIZE alignment is taken into account only for
-graphics display."
+Alignment is made with respect to the DIRECTION ('left or 'right) of
+WHAT ('window, 'margin, 'fringe or 'text) with an additional (and
+optional) CHAR-SIZE and PIXEL-SIZE.  PIXEL-SIZE alignment is taken into
+account only for graphics display."
 
   (let* ((char-size (or char-size 0))
          (pixel-size (if (display-graphic-p)
@@ -211,13 +211,13 @@ graphics display."
 (defun mode-line-maker--padding-to (&optional left right face)
   "Return the left and right padding for alignment.
 
-It allow to precisely align the mode-line (or header-line) to window,
-margin, fringe or text extents, depending on LEFT and RIGHT.  LEFT and
-RIGHT can be constant ('window, 'fringe, 'margin or 'text) or a cons
-specifying (what . (char-size . pixel-size)).  It returns two strings
-that must be respectively prepended and appended to the mode-line (or
-header-line).  An optional FACE can be given to be used for the prefix
-and the suffix."
+Padding allows to precisely align the mode-line (or header-line) to
+window, margin, fringe or text extents, depending on LEFT and RIGHT.
+LEFT and RIGHT can be constant ('window, 'fringe, 'margin or 'text) or a
+cons specifying (what . (char-size . pixel-size)).  It returns two
+strings that must be respectively prepended and appended to the
+mode-line (or header-line).  An optional FACE can be given to be used
+for the prefix and the suffix."
 
   (let* ((left (or left (car mode-line-maker-alignment)))
          (left (if (not (consp left))
@@ -384,7 +384,7 @@ specified whether pixel perfect alignment shoudl be computed (slower)."
 LEFT and RIGHT parts must be list of mode-line constructs.  The
 optional ALIGNMENT can be specified to replace the default
 'mode-line-maker-alignment'.  PIXELWISE specified whether pixel
-perfect alignment shoudl be computed (slower)."
+perfect alignment should be computed (slower)."
   
   `(:eval (mode-line-maker--make ',left ',right ',alignment ,pixelwise)))
 
